@@ -1,13 +1,16 @@
 require("dotenv").config();
 const express = require('express');
+var cors = require('cors')
 const database = require('../src/database');
 
 const UserController = require('./controllers/UserController');
 const AdminController = require('./controllers/AdminController');
 const authenticateMiddleware = require('./middlewares/authenticate');
 
+
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use("/users", UserController);
 app.use("/admin", authenticateMiddleware, AdminController);
