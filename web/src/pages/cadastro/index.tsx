@@ -1,11 +1,13 @@
+import { useState } from 'react';
 import { useRouter } from 'next/router';
+import axios from 'axios';
+import md5 from 'md5';
+
+import api from '@/services/api';
+import Button from '@/components/Button';
+import Input from '@/components/Input';
 
 import * as S from './styles';
-import Button from '@/components/Button';
-import { useState } from 'react';
-import api from '@/services/api';
-import axios from 'axios';
-import Input from '@/components/Input';
 
 export default function Cadastro() {
   const [name, setName] = useState('');
@@ -18,7 +20,7 @@ export default function Cadastro() {
     const userData = {
       name: name,
       email: email,
-      password: password
+      password: password.length > 0 ? md5(password) : null
     };
     axios
     api.post("/users", userData)
