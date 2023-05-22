@@ -7,14 +7,15 @@ const UserController = require('./controllers/UserController');
 const AdminController = require('./controllers/AdminController');
 const authenticateMiddleware = require('./middlewares/authenticate');
 
-
 const app = express();
+
+global.blacklist = [];
 
 app.use(cors());
 app.use(express.json());
-app.use("/users", UserController);
+app.use("/", UserController);
 app.use("/admin", authenticateMiddleware, AdminController);
 
-app.listen(3001, () => {
+app.listen(24100, () => {
   console.log('Server is runing');
 });
