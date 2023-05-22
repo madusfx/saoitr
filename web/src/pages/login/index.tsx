@@ -14,6 +14,13 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const router = useRouter();
 
+  useEffect(() => {
+    const token = getToken();
+    if (token) {
+      router.push('/home');
+    }
+  }, []);
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     const userData = {
@@ -38,13 +45,6 @@ export default function Login() {
         }
       });
   };
-
-  useEffect(() => {
-    const token = getToken();
-    if (token) {
-      router.push('/home');
-    }
-  }, []);
 
   return (
     <S.Card>

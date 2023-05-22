@@ -1,9 +1,19 @@
 import styled from "styled-components";
 
-export const Container = styled.button`
+type ButtonProps = {
+  color?: string;
+}
+
+export const Container = styled.button<ButtonProps>`
   border: none;
   border-radius: 6px;
   padding: 0.5rem;
   cursor: pointer;
-  margin-top: 24px;
+  ${({ color }) =>
+    color === 'primary' &&
+    `
+      background: teal;
+      color: white;
+    `
+  }
 `;
