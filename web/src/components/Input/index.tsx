@@ -18,4 +18,4 @@ const Input = ({ label, placeholder, onChange }: InputProps) => {
   )
 };
 
-export default Input;
+export { Input };
