@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import md5 from 'md5';
 
 import api from '@/services/api';
-import Button from '@/components/Button';
-import Input from '@/components/Input';
+import { getToken } from '@/services/auth';
+import { Button, Input } from '@/components';
 
 import * as S from './styles';
 
@@ -14,6 +14,13 @@ export default function Cadastro() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
+
+  useEffect(() => {
+    const token = getToken();
+    if (token) {
+      router.push('/home');
+    }
+  }, []);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -26,6 +33,7 @@ export default function Cadastro() {
     api.post("/users", userData)
       .then((response) => {
         console.log(response);
+        router.push('/login');
       })
       .catch((error) => {
         if (error.response) {

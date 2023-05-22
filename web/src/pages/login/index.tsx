@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import md5 from 'md5';
+import axios from 'axios';
+
 import api from "../../services/api";
-import { login } from '@/services/auth';
-import Button from '@/components/Button';
-import Input from '@/components/Input';
+import { getToken, login } from '@/services/auth';
+import { Button, Input } from '@/components';
 
 import * as S from './styles';
-import axios from 'axios';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -23,8 +23,9 @@ export default function Login() {
     axios
     api.post("/login", userData)
       .then((response) => {
-        login(response.data.token);
+        login(response.data.token, response.data.user._id);
         console.log(response);
+        router.push('/home');
       })
       .catch((error) => {
         if (error.response) {
@@ -37,6 +38,13 @@ export default function Login() {
         }
       });
   };
+
+  useEffect(() => {
+    const token = getToken();
+    if (token) {
+      router.push('/home');
+    }
+  }, []);
 
   return (
     <S.Card>
