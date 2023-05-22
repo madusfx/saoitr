@@ -16,7 +16,7 @@ const generateToken = (user = {}) => {
   });
 }
 
-router.post('/', async (req, res) => {
+router.post('/users', async (req, res) => {
   const { name, email, password } = req.body;
 
   if (await UserModel.findOne({ email })) {
@@ -68,7 +68,40 @@ router.post('/login', async (req, res) => {
     user,
     token: generateToken(user)
   });
+});
 
-})
+router.post('/logout', async (req, res) => {
+  const { id } = req.body;
+  const query = { _id: id };
+  const user = await UserModel.findOne(query).exec();
+  if (!user) {
+    return res.status(401).json({
+      message: "Usuário não encontrado"
+    })
+  };
+
+  const secret = process.env.JWT_SECRET;
+  const bearerHeader = req.headers['authorization'];
+  const bearerToken = bearerHeader.split(' ')[1];
+  const decoded = jwt.verify(bearerToken, secret);
+
+  if (decoded.id != user.id) {
+    return res.status(401).json({
+      message: "Essas credenciais não correspondem aos nossos registros.  -- ID NÃO CORRESPONDE AO TOKEN"
+    })
+  };
+
+  if (blacklist.find((item) => item == bearerToken)) {
+    return res.status(401).json({
+      message: "Essas credenciais não correspondem aos nossos registros.  -- TOKEN INVÁLIDO"
+    })
+  };
+
+  blacklist.push(bearerToken);
+
+  res.status(200).json({
+    message: "Logout realizado com sucesso."
+  });
+});
 
 module.exports = router;
