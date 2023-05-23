@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import api from "../../services/api";
 import { getToken, login } from '@/services/auth';
-import { Button, Input, Menu } from '@/components';
+import { Button, Input, Menu, Card } from '@/components';
 
 import * as S from './styles';
 
@@ -49,10 +49,7 @@ export default function Login() {
   return (
     <>
       <Menu />
-      <S.Card>
-        <S.Title>
-          Login
-        </S.Title>
+      <Card title={'Login'}>
         <form onSubmit={handleSubmit}>
           <Input label='E-mail' type='email' placeholder='email@email.com' required value={email} onChange={(e: any) => setEmail(e.target.value)} />
           <Input label='Senha' type='password' placeholder='Digite sua senha' required value={password} onChange={(e: any) => setPassword(e.target.value)} />
@@ -63,7 +60,7 @@ export default function Login() {
             Não tem uma conta? <div onClick={() => router.push('/cadastro')}>Clique aqui!</div>
           </S.Register>
         </form>
-      </S.Card>
+      </Card>
     </>
   )
 }

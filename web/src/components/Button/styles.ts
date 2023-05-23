@@ -5,10 +5,11 @@ type ButtonProps = {
 }
 
 export const Container = styled.button<ButtonProps>`
+  width: 50%;
+  margin-left: 25%;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
   border: none;
   border-radius: 6px;
   padding: 0.5rem;
@@ -20,7 +21,4 @@ export const Container = styled.button<ButtonProps>`
       color: white;
     `
   };
-  button {
-    width: 100%;
-  }
 `;

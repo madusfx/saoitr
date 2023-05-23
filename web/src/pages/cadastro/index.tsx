@@ -5,7 +5,7 @@ import md5 from 'md5';
 
 import api from '@/services/api';
 import { getToken } from '@/services/auth';
-import { Button, Input } from '@/components';
+import { Button, Input, Menu, Card } from '@/components';
 
 import * as S from './styles';
 
@@ -48,21 +48,21 @@ export default function Cadastro() {
   };
 
   return (
-    <S.Card>
-      <S.Title>
-        Cadastro
-      </S.Title>
-      <form onSubmit={handleSubmit} >
-        <Input type='text' placeholder='Nome' value={name} onChange={(e: any) => setName(e.target.value)} />
-        <Input type='email' placeholder='E-mail' value={email} onChange={(e: any) => setEmail(e.target.value)} />
-        <Input type='password' placeholder='Senha' value={password} onChange={(e: any) => setPassword(e.target.value)} />
-        <Button type='submit'>
-          Cadastrar
-        </Button>
-        <S.Register>
-          Já tem uma conta? <div onClick={() => router.push('/login')}>Clique aqui!</div>
-        </S.Register>
-      </form>
-    </S.Card>
+    <>
+      <Menu />
+      <Card title={'Cadastro'}>
+        <form onSubmit={handleSubmit} >
+          <Input label='Nome' type='text' placeholder='Digite seu nome' value={name} onChange={(e: any) => setName(e.target.value)} />
+          <Input label='E-mail' type='email' placeholder='email@email.com' value={email} onChange={(e: any) => setEmail(e.target.value)} />
+          <Input label='Senha' type='password' placeholder='Crie uma senha' value={password} onChange={(e: any) => setPassword(e.target.value)} />
+          <Button type='submit'>
+            Cadastrar
+          </Button>
+          <S.Register>
+            Já tem uma conta? <div onClick={() => router.push('/login')}>Clique aqui!</div>
+          </S.Register>
+        </form>
+      </Card>
+    </>
   )
 }
