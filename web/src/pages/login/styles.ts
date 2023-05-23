@@ -14,15 +14,19 @@ export const Card = styled.div`
   display: block;
   position: fixed;
   align-items: center;
+  justify-content: center;
   padding: 3rem;
   border-radius: 6px;
-  width: 30rem;
-  height: 20rem;
+  width: 60%;
+  height: 22rem;
   background: #bfdad7;
   form {
     width: 100%;
     display: flex;
     flex-direction: column;
+  }
+  button {
+    margin-top: 24px;
   }
 `;
 
@@ -30,21 +34,6 @@ export const Title = styled.p`
   font-size: 32px;
   color: white;
   text-align: center;
-`;
-
-export const Input = styled.input`
-  border: none;
-  border-radius: 6px;
-  padding: 0.5rem;
-  margin-top: 12px;
-`;
-
-export const Button = styled.button`
-  border: none;
-  border-radius: 6px;
-  padding: 0.5rem;
-  cursor: pointer;
-  margin-top: 24px;
 `;
 
 export const Register = styled.button`

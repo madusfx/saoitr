@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import api from "../../services/api";
 import { getToken, login } from '@/services/auth';
-import { Button, Input } from '@/components';
+import { Button, Input, Menu } from '@/components';
 
 import * as S from './styles';
 
@@ -47,20 +47,23 @@ export default function Login() {
   };
 
   return (
-    <S.Card>
-      <S.Title>
-        Login
-      </S.Title>
-      <form onSubmit={handleSubmit}>
-        <Input type='email' placeholder='E-mail' value={email} onChange={(e: any) => setEmail(e.target.value)} />
-        <Input type='password' placeholder='Senha' value={password} onChange={(e: any) => setPassword(e.target.value)} />
-        <Button type='submit'>
-          Entrar
-        </Button>
-        <S.Register>
-          Não tem uma conta? <div onClick={() => router.push('/cadastro')}>Clique aqui!</div>
-        </S.Register>
-      </form>
-    </S.Card>
+    <>
+      <Menu />
+      <S.Card>
+        <S.Title>
+          Login
+        </S.Title>
+        <form onSubmit={handleSubmit}>
+          <Input label='E-mail' type='email' placeholder='email@email.com' required value={email} onChange={(e: any) => setEmail(e.target.value)} />
+          <Input label='Senha' type='password' placeholder='Digite sua senha' required value={password} onChange={(e: any) => setPassword(e.target.value)} />
+          <Button type='submit'>
+            Entrar
+          </Button>
+          <S.Register>
+            Não tem uma conta? <div onClick={() => router.push('/cadastro')}>Clique aqui!</div>
+          </S.Register>
+        </form>
+      </S.Card>
+    </>
   )
 }

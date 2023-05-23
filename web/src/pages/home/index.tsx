@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import api from '@/services/api';
 import { getId, logout } from '@/services/auth';
 import { getToken } from '@/services/auth';
-import { Button } from '@/components';
+import { Menu } from '@/components';
 
 import * as S from './styles';
 
@@ -18,7 +18,7 @@ export default function Home() {
     }
   }, []);
 
-  const handleLogout = (event: any) => {
+  const handleLogout = () => {
     const formData = { id: getId() }
     const headers = { Authorization: `Bearer ${getToken()}` }
     api.post('/logout', formData, { headers }).then((res) => {
@@ -30,9 +30,8 @@ export default function Home() {
   }
 
   return (
-    <S.Menu>
-      <p>SAOITR</p>
-      <Button onClick={handleLogout} color={'primary'}>Logout</Button>
-    </S.Menu>
+    <S.Container>
+      <Menu withLogin onClick={handleLogout} />
+    </S.Container>
   )
 }

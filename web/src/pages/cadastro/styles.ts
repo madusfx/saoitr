@@ -16,12 +16,15 @@ export const Card = styled.div`
   align-items: center;
   padding: 3rem;
   border-radius: 6px;
-  width: 30rem;
-  height: 20rem;
+  width: 60%;
+  height: 22rem;
   background: #bfdad7;
   form {
     display: flex;
     flex-direction: column;
+  }
+  button {
+    margin-top: 24px;
   }
 `;
 
