@@ -16,8 +16,13 @@ const generateToken = (user = {}) => {
   });
 }
 
+const generateId = async () => {
+  return id = await UserModel.countDocuments() + 1;
+}
+
 router.post('/users', async (req, res) => {
   const { name, email, password } = req.body;
+  const userId = generateId();
 
   if (await UserModel.findOne({ email })) {
     return res.status(400).json({ error: true, message: 'E-mail já cadastrado' });
@@ -25,6 +30,7 @@ router.post('/users', async (req, res) => {
 
   try {
     const User = new UserModel({
+      id: userId,
       name: name,
       email: email,
       password: password,
@@ -35,7 +41,8 @@ router.post('/users', async (req, res) => {
       error: false,
       message: "Registered with success!",
       data: User,
-      token: generateToken(User)
+      token: generateToken(User),
+      id: userId
     });
   } catch (err) {
     console.log(err);
@@ -45,6 +52,7 @@ router.post('/users', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
+  const userId = generateId();
 
   const user = await UserModel.findOne({ email }).select("+password");
 
@@ -55,24 +63,28 @@ router.post('/login', async (req, res) => {
     })
   }
 
-  if (!await bcryptjs.compare(password, user.password)) {
-    return res.status(400).send({
-      error: true,
-      message: 'Senha inválida'
-    })
-  };
+  if (password) {
+    if (!await bcryptjs.compare(password, user.password)) {
+      return res.status(400).send({
+        error: true,
+        message: 'Senha inválida'
+      })
+    };
+  }
 
   user.password = undefined;
 
-  return res.json({
+  return res.status(200).json({
     user,
-    token: generateToken(user)
+    token: generateToken(user),
+    id: userId,
+    message: 'Logado com sucesso'
   });
 });
 
 router.post('/logout', async (req, res) => {
   const { id } = req.body;
-  const query = { _id: id };
+  const query = { id: id };
   const user = await UserModel.findOne(query).exec();
   if (!user) {
     return res.status(401).json({
@@ -85,11 +97,11 @@ router.post('/logout', async (req, res) => {
   const bearerToken = bearerHeader.split(' ')[1];
   const decoded = jwt.verify(bearerToken, secret);
 
-  if (decoded.id != user.id) {
-    return res.status(401).json({
-      message: "Essas credenciais não correspondem aos nossos registros.  -- ID NÃO CORRESPONDE AO TOKEN"
-    })
-  };
+  // if (decoded.id != user.id) {
+  //   return res.status(401).json({
+  //     message: "Essas credenciais não correspondem aos nossos registros.  -- ID NÃO CORRESPONDE AO TOKEN"
+  //   })
+  // };
 
   if (blacklist.find((item) => item == bearerToken)) {
     return res.status(401).json({
@@ -99,8 +111,8 @@ router.post('/logout', async (req, res) => {
 
   blacklist.push(bearerToken);
 
-  res.status(200).json({
-    message: "Logout realizado com sucesso."
+  return res.status(200).json({
+    message: "Logout realizado com sucesso.",
   });
 });
 

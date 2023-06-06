@@ -30,7 +30,7 @@ export default function Login() {
     axios
     api.post("/login", userData)
       .then((response) => {
-        login(response.data.token, response.data.user._id);
+        login(response.data.token, response.data.id);
         console.log(response);
         router.push('/home');
       })
