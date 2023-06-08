@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const OcurrenceSchema = new mongoose.Schema({
+const OccurrenceSchema = new mongoose.Schema({
   id: {
     type: String,
     required: true
@@ -27,6 +27,6 @@ const OcurrenceSchema = new mongoose.Schema({
   }
 });
 
-const Ocurrence = mongoose.model("Ocurrence", OcurrenceSchema);
+const Occurrence = mongoose.model("Occurrence", OccurrenceSchema);
 
-module.exports = Ocurrence;
+module.exports = Occurrence;

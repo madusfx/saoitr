@@ -10,19 +10,16 @@ const router = express.Router();
 const generateToken = (user = {}) => {
   return jwt.sign({
     id: user.id,
-    name: user.name
   }, authConfig.secret, {
     expiresIn: 3600
   });
 }
 
-const generateId = async () => {
-  return id = await UserModel.countDocuments() + 1;
-}
-
 router.post('/users', async (req, res) => {
   const { name, email, password } = req.body;
-  const userId = generateId();
+  const userId = (await UserModel.countDocuments()) + 1
+
+  console.log('userId', userId)
 
   if (await UserModel.findOne({ email })) {
     return res.status(400).json({ error: true, message: 'E-mail já cadastrado' });
@@ -38,11 +35,10 @@ router.post('/users', async (req, res) => {
     await User.save();
     User.password = undefined;
     return res.json({
-      error: false,
-      message: "Registered with success!",
-      data: User,
+      name: User.name,
+      email: User, email,
+      id: userId,
       token: generateToken(User),
-      id: userId
     });
   } catch (err) {
     console.log(err);
@@ -52,7 +48,6 @@ router.post('/users', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  const userId = generateId();
 
   const user = await UserModel.findOne({ email }).select("+password");
 
@@ -75,10 +70,10 @@ router.post('/login', async (req, res) => {
   user.password = undefined;
 
   return res.status(200).json({
-    user,
+    id: user.id,
+    name: user.name,
+    email: user.email,
     token: generateToken(user),
-    id: userId,
-    message: 'Logado com sucesso'
   });
 });
 
@@ -116,4 +111,16 @@ router.post('/logout', async (req, res) => {
   });
 });
 
+router.put('/users/:userId', async (req, res) => {
+  const { userId } = req.params;
+  const query = { id: userId };
+  const { name, email, password } = req.body;
+  const user = !password ? await UserModel.findOneAndUpdate(query, { name, email }, { new: true }) : await UserModel.findOneAndUpdate(query, { name, email, password }, { new: true });
+
+  res.status(200).json({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+  })
+})
 module.exports = router;

@@ -1,15 +1,15 @@
 const express = require('express');
 
-const OcurrenceModel = require('../models/Ocurrence');
+const OccurrenceModel = require('../models/Occurrence');
 
 const router = express.Router();
 
-router.post('/ocurrences', async (req, res) => {
+router.post('/occurrences', async (req, res) => {
   const { registered_at, local, occurrence_type, km, user_id } = req.body;
-  const id = (await OcurrenceModel.countDocuments()) + 1;
+  const id = (await OccurrenceModel.countDocuments()) + 1;
 
   try {
-    const Ocurrence = new OcurrenceModel({
+    const Occurrence = new OccurrenceModel({
       id: id,
       registered_at: registered_at,
       local: local,
@@ -17,11 +17,11 @@ router.post('/ocurrences', async (req, res) => {
       km: km,
       user_id: user_id
     });
-    await Ocurrence.save();
+    await Occurrence.save();
     console.log("Ocorrência registrada!");
     return res.json({
       error: false,
-      message: "Ocurrence registered with success!"
+      message: "Occurrence registered with success!"
     });
   } catch (err) {
     console.log(err);
@@ -29,14 +29,11 @@ router.post('/ocurrences', async (req, res) => {
   }
 });
 
-router.get('/ocurrences', async (req, res) => {
+router.get('/occurrences', async (req, res) => {
   try {
-    const ocurrences = await OcurrenceModel.find();
+    const occurrences = await OccurrenceModel.find();
     console.log("Ocorrências encontradas!");
-    return res.status(200).json({
-      ocurrences,
-      message: "Sucesso!"
-    })
+    return res.send(occurrences);
   }
   catch (err) {
     console.log("Nenhuma ocorrência foi encontrada!");
