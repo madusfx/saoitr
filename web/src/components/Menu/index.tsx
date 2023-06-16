@@ -4,10 +4,11 @@ import * as S from './styles';
 
 type MenuProps = {
   onClick?: () => void;
-  withLogin?: boolean;
+  withButton?: boolean;
+  title?: string;
 };
 
-const Menu = ({ onClick, withLogin }: MenuProps) => {
+const Menu = ({ onClick, withButton, title }: MenuProps) => {
   const router = useRouter();
 
   return (
@@ -17,10 +18,11 @@ const Menu = ({ onClick, withLogin }: MenuProps) => {
       </div>
       <div>
         <S.Links>
+          <S.Link onClick={() => router.push('/home')}>Home</S.Link>
           <S.Link onClick={() => router.push('/registrar_ocorrencia')}>Registrar Ocorrência</S.Link>
-          <S.Link>Atualizar Ocorrência</S.Link>
+          <S.Link>Minhas Ocorrências</S.Link>
           <S.Link onClick={() => router.push('/atualizar_cadastro')}>Atualizar Cadastro</S.Link>
-          {withLogin ? <Button onClick={onClick} color={'primary'}>Logout</Button> : null}
+          {withButton ? <Button onClick={onClick} color={'primary'}>{title}</Button> : null}
         </S.Links>
       </div>
     </S.Container>
