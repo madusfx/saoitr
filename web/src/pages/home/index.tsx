@@ -9,17 +9,17 @@ import { Menu, OccurrenceCard } from '@/components';
 
 import * as S from './styles';
 
-
 export default function Home() {
   const [data, setData] = useState([]);
+  const [userLogged, setUserLogged] = useState(false);
   const router = useRouter();
 
-  // useEffect(() => {
-  //   const token = getToken();
-  //   if (!token) {
-  //     router.push('/login');
-  //   }
-  // }, []);
+  useEffect(() => {
+    const token = getToken();
+    if (token) {
+      setUserLogged(true);
+    }
+  }, []);
 
   useEffect(() => {
     axios
@@ -46,7 +46,10 @@ export default function Home() {
 
   return (
     <S.Container>
-      <Menu withLogin onClick={handleLogout} />
+      {userLogged ?
+        <Menu withButton onClick={handleLogout} title={'Logout'} /> :
+        <Menu withButton onClick={() => router.push('/login')} title={'Login'} />
+      }
       <S.Title>Ocorrências</S.Title>
       {data.map((data, key) => <OccurrenceCard data={data} key={key} />)}
     </S.Container>
