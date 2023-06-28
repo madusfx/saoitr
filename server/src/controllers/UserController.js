@@ -18,7 +18,8 @@ const generateToken = (user = {}) => {
 
 router.post('/users', async (req, res) => {
   const { name, email, password } = req.body;
-  const userId = (await UserModel.countDocuments()) + 1
+  const lastObject = await UserModel.findOne().sort({ _id: -1 }).exec();
+  const userId = lastObject?.id ? lastObject.id + 1 : 1;
 
   if (await UserModel.findOne({ email })) {
     return res.status(400).json({ error: true, message: 'E-mail já cadastrado' });
@@ -154,5 +155,22 @@ router.get('/users/:userId', async (req, res) => {
     })
   }
 });
+
+router.delete('/users/:userId', async (req, res) => {
+  const { userId } = req.params;
+  const query = { id: userId };
+
+  try {
+    const user = await UserModel.findOneAndDelete(query);
+    console.log("Usuário deletado com sucesso!");
+    return res.status(200).send(user);
+  }
+  catch (err) {
+    console.log("Usuário não encontrado!");
+    return res.status(400).json({
+      message: "Usuário não encontrado!"
+    })
+  }
+})
 
 module.exports = router;
