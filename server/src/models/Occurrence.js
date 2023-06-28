@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 
 const OccurrenceSchema = new mongoose.Schema({
   id: {
-    type: String,
-    required: true
+    type: Number,
+    required: true,
+    unique: true
   },
   registered_at: {
     type: String,
